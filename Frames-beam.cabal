@@ -1,0 +1,37 @@
+name:                Frames-beam
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/githubuser/Frames-beam
+license:             BSD3
+license-file:        LICENSE
+author:              Gagandeep Bhatia
+maintainer:          gagandeepbhatia.in@gmail.com
+copyright:           2018 Gagandeep Bhatia
+category:            Data, Database, Data Science
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+
+
+test-suite spec
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , Frames-beam
+                     , hspec
+                     , QuickCheck
+
+source-repository head
+  type:     git
+  location: https://github.com/githubuser/Frames-beam
