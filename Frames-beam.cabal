@@ -2,7 +2,7 @@ name:                Frames-beam
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/Frames-beam
+homepage:            https://github.com/gagandeepb/Frames-beam
 license:             BSD3
 license-file:        LICENSE
 author:              Gagandeep Bhatia
@@ -34,4 +34,4 @@ test-suite spec
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/Frames-beam
+  location: https://github.com/gagandeepb/Frames-beam
