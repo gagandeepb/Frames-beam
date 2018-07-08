@@ -2,3 +2,7 @@
 /.cabal-sandbox/
 /cabal.sandbox.config
 /.stack-work/
+
+*.dump-splices
+
+Schema.hs
