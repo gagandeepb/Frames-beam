@@ -29,8 +29,8 @@ library
                     ,  generics-sop
                     ,  vinyl
                     ,  process
-      
-
+                    ,  conduit
+                    
 
 test-suite spec
   default-language:    Haskell2010
