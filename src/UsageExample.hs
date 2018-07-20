@@ -14,20 +14,15 @@ module UsageExample where
 
 
 import           Data.Coerce
-import           Data.Conduit                   (ConduitT, Void, await,
-                                                 runConduit, yield, yieldM,
-                                                 (.|), (=$=))
-import qualified Data.Conduit.Combinators       as CC
-import qualified Data.Conduit.List              as CL (mapM_, sourceList, take)
-import           Data.String                    (fromString)
+import           Data.Conduit                   (runConduit, (.|))
+import qualified Data.Conduit.List              as CL (take)
 import qualified Data.Vinyl.Functor             as VF
 import           Database.Beam
 import           Database.Beam.Postgres
 import qualified Database.Beam.Postgres.Conduit as DBPC
-import           Database.Beam.Postgres.Syntax
-import qualified Database.PostgreSQL.Simple     as Pg
 import qualified Frames                         as F
 import           FramesBeam.MigrationAutogen
+import           FramesBeam.Query
 import           FramesBeam.Vinylize            (createRecId, deriveVinyl)
 import           Generics.SOP
 import           Generics.SOP.TH
@@ -39,19 +34,16 @@ import           Schema
 
 
 -- generates a Beam schema file in src/ directory, named as `Schema.hs`
--- $(genBeamSchema "host=localhost dbname=shoppingcart1")
+$(genBeamSchema "host=localhost dbname=shoppingcart1")
 
 deriveGeneric ''Cart_usersT
 
 deriveVinyl ''Cart_usersT
 
-allUsers :: Q PgSelectSyntax Db s (Cart_usersT (QExpr PgExpressionSyntax s))
-allUsers = all_ (_cart_users db)
-
 selectAllUsers :: Connection -> IO [Cart_usersT Identity]
 selectAllUsers conn =
   runBeamPostgresDebug putStrLn conn $ do
-    users <- runSelectReturningList $ select allUsers
+    users <- runSelectReturningList $ select (allRows _cart_users db)
     (liftIO . return) users
 
 test :: IO ()
@@ -63,56 +55,21 @@ test = do
 
 
 -- Streaming
-
--- Question: Is this going to execute lazily in testStream2 ?
-source ::  Connection -> ConduitT () (Cart_usersT Identity) IO ()
-source conn = do
-  us <- liftIO $ selectAllUsers conn
-  CL.sourceList $ us
-
-conduit :: ConduitT (Cart_usersT Identity) String IO ()
-conduit = do
-  row <- await
-  -- liftIO $ print val
-  case row of
-    Nothing -> return ()
-    Just r -> do
-      yield $ show (createRecId r)
-      conduit
-
-sink :: Int -> ConduitT String Void IO [String]
-sink n = do
-  CL.take n
-
-conduit2 :: ConduitT (Cart_usersT Identity) (F.Record Fs) IO ()
-conduit2 = do
-  row <- await
-  -- liftIO $ print val
-  case row of
-    Nothing -> return ()
-    Just r -> do
-      yield $ (createRecId r)
-      conduit2
-
-sink2 :: Int -> ConduitT (F.Record Fs) Void IO [F.Record Fs]
-sink2 n = do
-  CL.take n
-
-testStream :: Int -> IO ()
-testStream n = do
+testStream1 :: Int -> IO [(Cart_usersT Identity)]
+testStream1 n = do
   conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
-  res <- runConduit $ (source conn)  .| conduit .| (sink n)
-  mapM_ putStrLn res
+  res <- DBPC.runSelect conn (select (allRows _cart_users db)) (\c -> runConduit $ c .| CL.take n)
+  return res
 
--- Question: Is this going to execute lazily?
-testStream2 :: Int -> IO ()
-testStream2 n = do
+testStream3 :: Int -> IO ()
+testStream3 n = do
   conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
-  res <- runConduit $ (source conn)  .| conduit2 .| (sink2 n)
-  mapM_ print (F.toFrame res)
+  res <- DBPC.runSelect conn (select (allRowsWhere _cart_users db (\c -> (_cart_usersFirst_name c) `like_` "J%") )) (\c -> runConduit $ c .| CL.take n)
+  mapM_ print $ map createRecId  res
 
-type Fs = '["_cart_usersEmail" F.:-> F.Text,
-            "_cart_usersFirst_name" F.:-> F.Text,
-            "_cart_usersLast_name" F.:-> F.Text,
-            "_cart_usersIs_member" F.:-> Bool,
-            "_cart_usersDays_in_queue" F.:-> Int]
+
+testStream4 :: Int -> IO [(Cart_usersT Identity)]
+testStream4 n = do
+  conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
+  res <- DBPC.runSelect conn (select (allRowsWhere _cart_users db (\c -> (_cart_usersFirst_name c) `like_` "J%") )) (\c -> runConduit $ c .| CL.take n)
+  return res
