@@ -5,6 +5,7 @@
 {-# LANGUAGE MultiParamTypeClasses  #-}
 {-# LANGUAGE OverloadedStrings      #-}
 {-# LANGUAGE TemplateHaskell        #-}
+{-# LANGUAGE TypeApplications       #-}
 {-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE TypeFamilyDependencies #-}
 {-# LANGUAGE TypeOperators          #-}
@@ -15,7 +16,8 @@ module UsageExample where
 
 import           Data.Coerce
 import           Data.Conduit                   (runConduit, (.|))
-import qualified Data.Conduit.List              as CL (take)
+import qualified Data.Conduit.List              as CL
+import           Data.Text                      (Text)
 import qualified Data.Vinyl.Functor             as VF
 import           Database.Beam
 import           Database.Beam.Postgres
@@ -23,6 +25,7 @@ import qualified Database.Beam.Postgres.Conduit as DBPC
 import qualified Frames                         as F
 import           FramesBeam.MigrationAutogen
 import           FramesBeam.Query
+import           FramesBeam.Streaming
 import           FramesBeam.Vinylize            (createRecId, deriveVinyl)
 import           Generics.SOP
 import           Generics.SOP.TH
@@ -73,3 +76,25 @@ testStream4 n = do
   conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
   res <- DBPC.runSelect conn (select (allRowsWhere _cart_users db (\c -> (_cart_usersFirst_name c) `like_` "J%") )) (\c -> runConduit $ c .| CL.take n)
   return res
+
+
+testStream5 :: IO ()
+testStream5 = do
+  conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
+  res <- bulkSelectAllRows conn _cart_users db 1000
+  mapM_ (print . createRecId) res
+
+
+testStream6 :: IO ()
+testStream6 = do
+  conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
+  res <- streamingSelectAllPipeline' conn _cart_users db 1000 (\c -> (_cart_usersFirst_name c) `like_` "J%") (CL.isolate 1000)
+  mapM_ print res
+
+-- Streaming column-subset
+testStream7 :: IO ()
+testStream7 = do
+  conn <- connectPostgreSQL  "host=localhost dbname=shoppingcart1"
+  res <- streamingSelectAllPipeline' conn _cart_users db 1000 (\c -> (_cart_usersFirst_name c) `like_` "J%") $
+           (CL.map (\record -> F.rcast @["_cart_usersEmail" F.:-> Text, "_cart_usersIs_member" F.:-> Bool] record))
+  mapM_ print res
