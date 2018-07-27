@@ -4,32 +4,32 @@ module FramesBeam.MigrationAutogen (
   genBeamSchema
 ) where
 
-import qualified Data.Text           as T
+import qualified Data.ByteString                as B
+import qualified Data.Text                      as T
+import           Database.Beam.Migrate.Simple   (haskellSchema)
+import           Database.Beam.Postgres         (runBeamPostgres)
+import           Database.Beam.Postgres.Migrate (migrationBackend)
+import qualified Database.PostgreSQL.Simple     as Pg
 import           Language.Haskell.TH
 import           System.Process
 
-go :: String -> Q String
+go :: B.ByteString -> Q String
 go connString = do
-  _ <- runIO $ readCreateProcess (shell ("touch src/Schema.hs")) ""
+  _ <- runIO $ readCreateProcess (shell ("touch src/NewBeamSchema.hs")) ""
   code <- runIO $ getCode connString
   return code
 
-genBeamSchema :: String -> Q [Dec]
+genBeamSchema :: B.ByteString -> Q [Dec]
 genBeamSchema str = do
   code <-  go str
-  _ <- runIO $ readCreateProcess (shell ("echo " ++ (show code) ++ " > src/Schema.hs")) ""
+  _ <- runIO $ readCreateProcess (shell ("echo " ++ (show code) ++ " > src/NewBeamSchema.hs")) ""
   [d| id x = x |]
 
-
-
-getCode :: String -> IO String
+getCode :: B.ByteString -> IO String
 getCode connString = do
-  codeString <- readCreateProcess mycmd ""
+  conn <- Pg.connectPostgreSQL connString
+  codeString <- runBeamPostgres conn (haskellSchema migrationBackend)
   return $ sanitizeCode codeString
-  where
-    mycmd =
-      shell
-        ("stack exec -- beam-migrate simple schema --backend Database.Beam.Postgres.Migrate --connection " ++ (show connString))
 
 sanitizeCode :: String -> String
 sanitizeCode str =

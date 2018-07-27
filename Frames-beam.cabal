@@ -37,6 +37,7 @@ library
                     ,  process
                     ,  conduit
                     ,  monad-control
+                    ,  bytestring
                     
 
 test-suite spec

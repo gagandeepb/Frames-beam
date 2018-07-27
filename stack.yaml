@@ -65,3 +65,4 @@ packages:
 # compiler-check: newer-minor
 extra-deps:
 - beam-postgres-0.3.2.0
+- beam-migrate-0.3.2.1

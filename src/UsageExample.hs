@@ -33,7 +33,7 @@ import           Generics.SOP.TH
 -- this would allow the Schema module to be generated on the first compilation
 -- Once `Schema` is generated (or rather "bootstrapped"),
 -- there is no need of commenting out this import
-import           Schema
+import           NewBeamSchema
 
 
 -- generates a Beam schema file in src/ directory, named as `Schema.hs`
@@ -98,3 +98,5 @@ testStream7 = do
   res <- streamingSelectAllPipeline' conn _cart_users db 1000 (\c -> (_cart_usersFirst_name c) `like_` "J%") $
            (CL.map (\record -> F.rcast @["_cart_usersEmail" F.:-> Text, "_cart_usersIs_member" F.:-> Bool] record))
   mapM_ print res
+
+
