@@ -60,6 +60,7 @@ test-suite spec
                      , beam-core
                      , beam-postgres
                      , beam-migrate
+                     , bytestring
 
 source-repository head
   type:     git
