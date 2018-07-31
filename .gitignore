@@ -5,5 +5,3 @@
 
 *.dump-splices
 
-Schema.hs
-NewBeamSchema.hs

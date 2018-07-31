@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
 module FramesBeam.MigrationAutogen (
-  genBeamSchema
+  genBeamSchema,
+  genBeamSchemaForTests,
+  getCode
 ) where
 
 import qualified Data.ByteString                as B
@@ -13,17 +15,29 @@ import qualified Database.PostgreSQL.Simple     as Pg
 import           Language.Haskell.TH
 import           System.Process
 
-go :: B.ByteString -> Q String
-go connString = do
-  _ <- runIO $ readCreateProcess (shell ("touch src/NewBeamSchema.hs")) ""
+data FolderName = Src | Test
+
+instance Show FolderName where
+  show Src  = "src"
+  show Test = "test"
+
+go :: B.ByteString -> FolderName -> Q String
+go connString folder = do
+  _ <- runIO $ readCreateProcess (shell ("touch " ++ (show folder) ++ "/NewBeamSchema.hs")) ""
   code <- runIO $ getCode connString
   return code
 
-genBeamSchema :: B.ByteString -> Q [Dec]
-genBeamSchema str = do
-  code <-  go str
-  _ <- runIO $ readCreateProcess (shell ("echo " ++ (show code) ++ " > src/NewBeamSchema.hs")) ""
+genBeamSchemaHelper :: B.ByteString -> FolderName -> Q [Dec]
+genBeamSchemaHelper str folder = do
+  code <-  go str folder
+  _ <- runIO $ readCreateProcess (shell ("echo " ++ (show code) ++ " > " ++ (show folder) ++ "/NewBeamSchema.hs")) ""
   [d| id x = x |]
+
+genBeamSchema :: B.ByteString -> Q [Dec]
+genBeamSchema str = genBeamSchemaHelper str Src
+
+genBeamSchemaForTests :: B.ByteString -> Q [Dec]
+genBeamSchemaForTests str = genBeamSchemaHelper str Test
 
 getCode :: B.ByteString -> IO String
 getCode connString = do

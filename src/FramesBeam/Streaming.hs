@@ -3,11 +3,9 @@
 module FramesBeam.Streaming where
 
 import           Control.Monad.Trans.Control    (MonadBaseControl)
-import           Data.Conduit                   (ConduitT, runConduit, yield,
-                                                 (.|))
+import           Data.Conduit                   (ConduitT, runConduit, (.|))
 import qualified Data.Conduit.List              as CL
 import           Database.Beam
-import qualified Database.Beam.Backend.Types    as DBBT
 import           Database.Beam.Postgres
 import qualified Database.Beam.Postgres.Conduit as DBPC
 import           Database.Beam.Postgres.Syntax
