@@ -4,8 +4,12 @@ sudo: false
 # Choose a lightweight base image; we provide our own build tools.
 language: c
 
+services:
+  - postgresql
+
 # GHC depends on GMP. You can add other dependencies here as well.
 addons:
+  postgresql: "9.5"
   apt:
     packages:
     - libgmp-dev
@@ -24,6 +28,10 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+before_script:
+- psql -c 'create database shoppingcart1;' -U postgres
+- psql shoppingcart1 < data/users.sql
 
 # This line does all of the work: installs GHC if necessary, build the library,
 # executables, and test suites, and runs the test suites. --no-terminal works

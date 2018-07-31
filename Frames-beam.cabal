@@ -17,20 +17,49 @@ library
   default-language:    Haskell2010
   ghc-options:         -Wall
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     FramesBeam
+                    ,  FramesBeam.MigrationAutogen
+                    ,  FramesBeam.Vinylize
+                    ,  FramesBeam.Query
+                    ,  FramesBeam.Streaming
+  other-modules:       FramesBeam.Helpers              
   build-depends:       base >= 4.7 && < 5
-
+                    ,  beam-core
+                    ,  beam-postgres
+                    ,  beam-migrate
+                    ,  text
+                    ,  postgresql-simple
+                    ,  Frames
+                    ,  template-haskell
+                    ,  generics-sop
+                    ,  vinyl
+                    ,  process
+                    ,  conduit
+                    ,  monad-control
+                    ,  bytestring
+                    
 
 test-suite spec
   default-language:    Haskell2010
-  ghc-options:         -Wall
+  ghc-options:         -Wall 
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       LibSpec
+                       NewBeamSchema
   build-depends:       base
                      , Frames-beam
                      , hspec
+                     , hspec-core
                      , QuickCheck
+                     , conduit
+                     , generics-sop
+                     , text
+                     , vinyl
+                     , Frames
+                     , beam-core
+                     , beam-postgres
+                     , beam-migrate
 
 source-repository head
   type:     git
