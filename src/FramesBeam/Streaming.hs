@@ -17,18 +17,19 @@ import           Frames.Rec                     (Record)
 import           FramesBeam.Query
 import           FramesBeam.Vinylize
 
+type NumberOfRows = Int
+
 -- | Selects a given number of rows. Result returned as a list of plain
 -- Haskell records.
 bulkSelectAllRows ::
   (Database Postgres b, Table a, MonadIO m,
     MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity)) =>
-    (DatabaseSettings Postgres b ->
-      DatabaseEntity Postgres b (TableEntity a)) ->
-    DatabaseSettings Postgres b ->
-    Int ->
-    Connection ->
-    m [(a Identity)]
+    PostgresTable a b
+    -> PostgresDB b
+    -> NumberOfRows
+    -> Connection
+    -> m [(a Identity)]
 bulkSelectAllRows tbl db nrows conn =
   DBPC.runSelect conn (select (allRows tbl db)) (\c -> runConduit $ c .| CL.take nrows)
 
@@ -39,14 +40,12 @@ bulkSelectAllRowsWhere ::
   (Database Postgres b, Table a, MonadIO m,
     MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity)) =>
-      (DatabaseSettings Postgres b ->
-        DatabaseEntity Postgres b (TableEntity a)) ->
-      DatabaseSettings Postgres b ->
-      Int ->
-      (forall s. (a (QExpr PgExpressionSyntax s)) ->
-        QExpr PgExpressionSyntax s Bool) ->
-      Connection ->
-      m [(a Identity)]
+      PostgresTable a b
+      -> PostgresDB b
+      -> NumberOfRows
+      -> (forall s. PostgresFilterLambda a s)
+      -> Connection
+      -> m [(a Identity)]
 bulkSelectAllRowsWhere tbl db nrows filterLambda conn =
   DBPC.runSelect conn (select (allRowsWhere tbl db filterLambda)) (\c -> runConduit $ c .| CL.take nrows)
 
@@ -57,13 +56,12 @@ streamingSelectAllPipeline ::
   (Database Postgres b, Table a, MonadIO m, MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity),
     GenericVinyl (a Identity) a_names a_rs) =>
-    (DatabaseSettings Postgres b ->
-      DatabaseEntity Postgres b (TableEntity a)) ->
-    DatabaseSettings Postgres b ->
-    Int ->
-    ConduitT (Record (ZipTypes a_names a_rs)) out m () ->
-    Connection ->
-    m [out]
+    PostgresTable a b
+    -> PostgresDB b
+    -> NumberOfRows
+    -> ConduitT (Record (ZipTypes a_names a_rs)) out m ()
+    -> Connection
+    -> m [out]
 streamingSelectAllPipeline tbl db nrows recordProcessorConduit conn =
   DBPC.runSelect conn (select (allRows tbl db)) $
     (\c -> runConduit $ c .| CL.map createRecId
@@ -77,15 +75,13 @@ streamingSelectAllPipeline' ::
   (Database Postgres b, Table a, MonadIO m, MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity),
     GenericVinyl (a Identity) a_names a_rs) =>
-      (DatabaseSettings Postgres b ->
-        DatabaseEntity Postgres b (TableEntity a)) ->
-      DatabaseSettings Postgres b ->
-      Int ->
-      (forall s. (a (QExpr PgExpressionSyntax s)) ->
-        QExpr PgExpressionSyntax s Bool) ->
-      ConduitT (Record (ZipTypes a_names a_rs)) out m () ->
-      Connection ->
-      m [out]
+    PostgresTable a b
+    -> PostgresDB b
+    -> NumberOfRows
+    -> (forall s. PostgresFilterLambda a s)
+    -> ConduitT (Record (ZipTypes a_names a_rs)) out m ()
+    -> Connection
+    -> m [out]
 streamingSelectAllPipeline' tbl db nrows filterLambda recordProcessorConduit conn =
   DBPC.runSelect conn (select (allRowsWhere tbl db filterLambda)) $
     (\c -> runConduit $ c .| CL.map createRecId
