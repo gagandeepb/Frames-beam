@@ -25,7 +25,7 @@ import           Database.Beam
 import           Database.Beam.Postgres
 import qualified Database.Beam.Postgres.Conduit as DBPC
 import qualified Frames                         as F
-import           FramesBeam.MigrationAutogen
+import           FramesBeam.BeamSchemaGen
 import           FramesBeam.Query
 import           FramesBeam.Streaming
 import           FramesBeam.Vinylize            (createRecId, deriveVinyl)

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
-module FramesBeam.MigrationAutogen (
+module FramesBeam.BeamSchemaGen (
   genBeamSchema,
   genBeamSchemaForTests,
   getCode

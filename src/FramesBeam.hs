@@ -1,8 +1,12 @@
 module FramesBeam
     (
       module FramesBeam.Vinylize
-    , module FramesBeam.MigrationAutogen
+    , module FramesBeam.BeamSchemaGen
+    , module FramesBeam.Query
+    , module FramesBeam.Streaming
     ) where
 
-import           FramesBeam.MigrationAutogen
+import           FramesBeam.BeamSchemaGen
+import           FramesBeam.Query
+import           FramesBeam.Streaming
 import           FramesBeam.Vinylize

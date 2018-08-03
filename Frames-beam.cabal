@@ -18,7 +18,7 @@ library
   ghc-options:         -Wall
   hs-source-dirs:      src
   exposed-modules:     FramesBeam
-                    ,  FramesBeam.MigrationAutogen
+                    ,  FramesBeam.BeamSchemaGen
                     ,  FramesBeam.Vinylize
                     ,  FramesBeam.Query
                     ,  FramesBeam.Streaming
