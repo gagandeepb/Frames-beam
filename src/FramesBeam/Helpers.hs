@@ -1,8 +1,12 @@
+-- | Template Haskell helper functions used internally.
 {-# LANGUAGE TemplateHaskell #-}
-module FramesBeam.Helpers where
+module FramesBeam.Helpers (
+  fNamesTypeLevel
+) where
 
 import           Language.Haskell.TH
 
+-- | Returns a type-level list of record field names
 fNamesTypeLevel :: Name -> Q Type
 fNamesTypeLevel name = do
   fnames <- fmap getRecordFields $ reify name
