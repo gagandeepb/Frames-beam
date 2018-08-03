@@ -1,3 +1,4 @@
+-- | Functions for streaming DB queries.
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes       #-}
 module FramesBeam.Streaming where
@@ -16,6 +17,8 @@ import           Frames.Rec                     (Record)
 import           FramesBeam.Query
 import           FramesBeam.Vinylize
 
+-- | Selects a given number of rows. Result returned as a list of plain
+-- Haskell records.
 bulkSelectAllRows ::
   (Database Postgres b, Table a, MonadIO m,
     MonadBaseControl IO m,
@@ -29,7 +32,9 @@ bulkSelectAllRows ::
 bulkSelectAllRows tbl db nrows conn =
   DBPC.runSelect conn (select (allRows tbl db)) (\c -> runConduit $ c .| CL.take nrows)
 
-
+-- | Selects a given number of rows that satisfy a filter condition that
+-- is executed at the DB-level. Result returned as a list of plain
+-- Haskell records.
 bulkSelectAllRowsWhere ::
   (Database Postgres b, Table a, MonadIO m,
     MonadBaseControl IO m,
@@ -45,6 +50,9 @@ bulkSelectAllRowsWhere ::
 bulkSelectAllRowsWhere tbl db nrows filterLambda conn =
   DBPC.runSelect conn (select (allRowsWhere tbl db filterLambda)) (\c -> runConduit $ c .| CL.take nrows)
 
+-- | Selects a given number of rows, and processes them using a user-provided
+-- @conduit@. User-provided @conduit@ takes in vinyl-records, and sends output
+-- downstream. Result returned as a list of outputs of the @conduit@.
 streamingSelectAllPipeline ::
   (Database Postgres b, Table a, MonadIO m, MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity),
@@ -62,6 +70,9 @@ streamingSelectAllPipeline tbl db nrows recordProcessorConduit conn =
                           .| recordProcessorConduit
                           .| CL.take nrows)
 
+-- | Similar as @streamingSelectAllPipeline@, with an additional @filterLambda@
+-- parameter that executes a SQL 'SELECT * FROM tbl WHERE' at the DB-level
+-- prior to sending results downstream.
 streamingSelectAllPipeline' ::
   (Database Postgres b, Table a, MonadIO m, MonadBaseControl IO m,
     FromBackendRow Postgres (a Identity),
@@ -81,6 +92,11 @@ streamingSelectAllPipeline' tbl db nrows filterLambda recordProcessorConduit con
                           .| recordProcessorConduit
                           .| CL.take nrows)
 
+-- | Takes in the connection string, one of the the other 4 functions in
+-- in this module with just the @Connection@ object unapplied. Internally,
+-- it acquires the connection object using the string, passes it to the
+-- function that performs an IO action, and then cleans up afterwards by
+-- closing the database connection.
 withConnection :: B.ByteString -> (Connection -> IO a) -> IO a
 withConnection connString =
   bracket

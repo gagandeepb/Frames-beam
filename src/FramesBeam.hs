@@ -1,3 +1,4 @@
+-- | Re-exports the underlying modules.
 module FramesBeam
     (
       module FramesBeam.Vinylize
