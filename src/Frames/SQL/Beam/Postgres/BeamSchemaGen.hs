@@ -1,7 +1,7 @@
 -- | Functions that help generate Beam schema at compile time.
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
-module FramesBeam.BeamSchemaGen (
+module Frames.SQL.Beam.Postgres.BeamSchemaGen (
   genBeamSchema,
   genBeamSchemaForTests,
   getCode

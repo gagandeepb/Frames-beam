@@ -1,21 +1,21 @@
 -- | Functions for streaming DB queries.
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes       #-}
-module FramesBeam.Streaming where
+module Frames.SQL.Beam.Postgres.Streaming where
 
-import           Control.Exception              (bracket)
-import           Control.Monad.Trans.Control    (MonadBaseControl)
-import qualified Data.ByteString                as B
-import           Data.Conduit                   (ConduitT, runConduit, (.|))
-import qualified Data.Conduit.List              as CL
+import           Control.Exception                 (bracket)
+import           Control.Monad.Trans.Control       (MonadBaseControl)
+import qualified Data.ByteString                   as B
+import           Data.Conduit                      (ConduitT, runConduit, (.|))
+import qualified Data.Conduit.List                 as CL
 import           Database.Beam
 import           Database.Beam.Postgres
-import qualified Database.Beam.Postgres.Conduit as DBPC
+import qualified Database.Beam.Postgres.Conduit    as DBPC
 import           Database.Beam.Postgres.Syntax
-import qualified Database.PostgreSQL.Simple     as Pg
-import           Frames.Rec                     (Record)
-import           FramesBeam.Query
-import           FramesBeam.Vinylize
+import qualified Database.PostgreSQL.Simple        as Pg
+import           Frames.Rec                        (Record)
+import           Frames.SQL.Beam.Postgres.Query
+import           Frames.SQL.Beam.Postgres.Vinylize
 
 type NumberOfRows = Int
 

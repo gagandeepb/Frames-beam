@@ -22,12 +22,12 @@ library
   default-language:    Haskell2010
   ghc-options:         -Wall
   hs-source-dirs:      src
-  exposed-modules:     FramesBeam
-                    ,  FramesBeam.BeamSchemaGen
-                    ,  FramesBeam.Vinylize
-                    ,  FramesBeam.Query
-                    ,  FramesBeam.Streaming
-  other-modules:       FramesBeam.Helpers              
+  exposed-modules:     Frames.SQL.Beam.Postgres
+                    ,  Frames.SQL.Beam.Postgres.BeamSchemaGen
+                    ,  Frames.SQL.Beam.Postgres.Vinylize
+                    ,  Frames.SQL.Beam.Postgres.Query
+                    ,  Frames.SQL.Beam.Postgres.Streaming
+  other-modules:       Frames.SQL.Beam.Postgres.Helpers              
   build-depends:       base >= 4.7 && < 5
                     ,  beam-core
                     ,  beam-postgres

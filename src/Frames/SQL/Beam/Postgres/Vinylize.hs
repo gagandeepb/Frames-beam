@@ -8,16 +8,16 @@
 {-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE TypeFamilyDependencies #-}
 {-# LANGUAGE TypeOperators          #-}
-module FramesBeam.Vinylize where
+module Frames.SQL.Beam.Postgres.Vinylize where
 
 import           Data.Proxy
 import           Data.Vinyl
-import qualified Data.Vinyl.Functor  as VF
-import qualified Database.Beam       as B
+import qualified Data.Vinyl.Functor               as VF
+import qualified Database.Beam                    as B
 import           Frames.Col
-import           FramesBeam.Helpers  (fNamesTypeLevel)
+import           Frames.SQL.Beam.Postgres.Helpers (fNamesTypeLevel)
 import           Generics.SOP
-import qualified Generics.SOP.NP     as GSN
+import qualified Generics.SOP.NP                  as GSN
 import           GHC.TypeLits
 import           Language.Haskell.TH
 

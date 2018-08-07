@@ -6,7 +6,7 @@
 {-# LANGUAGE PolyKinds        #-}
 {-# LANGUAGE TypeFamilies     #-}
 {-# LANGUAGE TypeOperators    #-}
-module FramesBeam.Query where
+module Frames.SQL.Beam.Postgres.Query where
 
 import           Data.Vinyl.TypeLevel
 import           Database.Beam
@@ -14,7 +14,7 @@ import           Database.Beam.Postgres
 import           Database.Beam.Postgres.Syntax
 import           Frames.Frame
 import           Frames.InCore
-import           FramesBeam.Vinylize
+import           Frames.SQL.Beam.Postgres.Vinylize
 
 type PostgresTable a b =
   DatabaseSettings Postgres b -> DatabaseEntity Postgres b (TableEntity a)

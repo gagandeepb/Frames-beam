@@ -15,11 +15,11 @@ module LibSpec where
 import           Test.Hspec
 import           Test.Hspec.Core.Util
 
-import qualified Data.Conduit.List    as CL
-import qualified Data.Vinyl.Functor   as VF
-import qualified Frames               as F
-import           FramesBeam
-import           GHC.Exception        (SomeException)
+import qualified Data.Conduit.List        as CL
+import qualified Data.Vinyl.Functor       as VF
+import qualified Frames                   as F
+import           Frames.SQL.Beam.Postgres
+import           GHC.Exception            (SomeException)
 import           NewBeamSchema
 
 
