@@ -1,6 +1,6 @@
 name:                Frames-beam
 version:             0.1.0.0
-synopsis:            A library for accessing Postgres tables as data frames (i.e. an in-memory data structure).  
+synopsis:            A library for accessing Postgres tables as in-memory data structures.  
 description:         
       This library provides a way to access Postgres tables as data frames by providing helpers for generating 
       types (at compile time) corresponding to a database schema  and canned queries to execute against a database
@@ -42,6 +42,9 @@ library
                     ,  conduit
                     ,  monad-control
                     ,  bytestring
+                    ,  scientific
+                    ,  time
+                    ,  uuid-types
                     
 
 test-suite spec

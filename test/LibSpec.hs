@@ -15,25 +15,13 @@ module LibSpec where
 import           Test.Hspec
 import           Test.Hspec.Core.Util
 
-import qualified Data.ByteString                as B
-import           Data.Coerce
-import           Data.Conduit                   (runConduit, (.|))
-import qualified Data.Conduit.List              as CL
-import           Data.Text                      (Text)
-import qualified Data.Vinyl.Functor             as VF
-import           Database.Beam
-import           Database.Beam.Postgres
-import qualified Database.Beam.Postgres.Conduit as DBPC
-import qualified Frames                         as F
-import           FramesBeam.BeamSchemaGen
-import           FramesBeam.Query
-import           FramesBeam.Streaming
-import           FramesBeam.Vinylize            (createRecId, deriveVinyl)
-import           Generics.SOP
-import           Generics.SOP.TH
-import           GHC.Exception                  (SomeException)
-
+import qualified Data.Conduit.List    as CL
+import qualified Data.Vinyl.Functor   as VF
+import qualified Frames               as F
+import           FramesBeam
+import           GHC.Exception        (SomeException)
 import           NewBeamSchema
+
 
 
 $(genBeamSchemaForTests "host=localhost dbname=shoppingcart1")
@@ -78,7 +66,7 @@ formatEx :: Either SomeException b -> ExceptionStatus
 formatEx (Left e)  = ExceptionRaised (formatException e)
 formatEx (Right _) = NoExceptionRaised
 
-connString :: B.ByteString
+connString :: ByteString
 connString = "host=localhost dbname=shoppingcart1"
 
 test0 :: IO ()
