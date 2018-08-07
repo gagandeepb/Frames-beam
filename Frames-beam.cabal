@@ -1,7 +1,12 @@
 name:                Frames-beam
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            A library for accessing Postgres tables as data frames (i.e. an in-memory data structure).  
+description:         
+      This library provides a way to access Postgres tables as a data frame by providing helpers for generating 
+      types (at compile time) corresponding to a database schema  and canned queries to execute against a database
+      instance. Additionally, provides utilities to convert plain Haskell records (i.e. the format of query results) 
+      to vinyl records (upon which the Frames library is based). Can be used for interactive exploration by loading
+      all data in-memory at once (and converting to a data frame), and also in a constant memory streaming mode.  
 homepage:            https://github.com/gagandeepb/Frames-beam
 license:             BSD3
 license-file:        LICENSE
@@ -10,7 +15,7 @@ maintainer:          gagandeepbhatia.in@gmail.com
 copyright:           2018 Gagandeep Bhatia
 category:            Data, Database, Data Science
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  README.md data/users.sql CHANGELOG.md
 cabal-version:       >=1.10
 
 library
