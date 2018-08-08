@@ -175,3 +175,14 @@ or
 (\tbl -> (_fieldName1 tbl) `op` (_fieldName2 tbl))
 ```
 In the above `op` can be one of : [`==.`, `/=.`, `>.`, `<.`, `<=.`, `>=.`, `between_`, `like_`, `in_` ] (some of these are not be applicable to the second case). You may use `(&&.)` and `(||.)` to combine expressions inside the lambda. 
+
+## Background Reading:
+
+* About `deriveGeneric` and `deriveVinyl`: [Deriving Vinyl Representation From Plain Haskell Records][generic-vinyl]
+* [Frames tutorial][frames-tutorial]
+* [Beam tutorial and user-guide][beam-indepth]
+
+
+[generic-vinyl]: https://www.gagandeepbhatia.com/blog/deriving-vinyl-representation-from-plain-haskell-records/
+[frames-tutorial]: http://acowley.github.io/Frames/
+[beam-indepth]: https://tathougies.github.io/beam/
