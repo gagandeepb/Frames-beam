@@ -174,7 +174,7 @@ or
 ```haskell
 (\tbl -> (_fieldName1 tbl) `op` (_fieldName2 tbl))
 ```
-In the above `op` can be one of : [`==.`, `/=.`, `>.`, `<.`, `<=.`, `>=.`, `between_`, `like_`, `in_` ] (some of these are not be applicable to the second case). You may use `(&&.)` and `(||.)` to combine expressions inside the lambda. 
+In the above `op` can be one of : [`==.`, `/=.`, `>.`, `<.`, `<=.`, `>=.`, `between_`, `like_`, `in_` ] (some of these are not be applicable to the second case). You may use `(&&.)` and `(||.)` to combine expressions inside the lambda. To see some actual examples of 'filter lambdas', check out `test/LibSpec.hs` in this repository.
 
 ## Background Reading:
 

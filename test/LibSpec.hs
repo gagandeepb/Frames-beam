@@ -57,8 +57,18 @@ spec =
     it "testStream6" $ do
       res <- safeTry $ testStream6
       (formatEx res) `shouldBe` (NoExceptionRaised)
-
-
+    it "testStream7" $ do
+      res <- safeTry $ testStream7
+      (formatEx res) `shouldBe` (NoExceptionRaised)
+    it "testStream8" $ do
+      res <- safeTry $ testStream8
+      (formatEx res) `shouldBe` (NoExceptionRaised)
+    it "testStream9" $ do
+      res <- safeTry $ testStream9
+      (formatEx res) `shouldBe` (NoExceptionRaised)
+    it "testStream10" $ do
+      res <- safeTry $ testStream10
+      (formatEx res) `shouldBe` (NoExceptionRaised)
 
 data ExceptionStatus = ExceptionRaised String | NoExceptionRaised deriving (Show, Eq)
 
@@ -112,4 +122,43 @@ testStream6 = do
   res <-  withConnection connString $
             streamingSelectAllPipeline' _cart_users db 1000 (\c -> (_cart_usersFirst_name c) `like_` "J%") $
               (CL.map (\record -> F.rcast @["_cart_usersEmail" F.:-> Text, "_cart_usersIs_member" F.:-> Bool] record))
+  mapM_ print res
+
+
+testStream7 :: IO ()
+testStream7 = do
+  res <-  withConnection connString $
+            streamingSelectAllPipeline' _cart_users db 1000 (\c ->
+                (charLength_ $ _cart_usersFirst_name c) >. (charLength_ $ _cart_usersLast_name c)) $
+              (CL.isolate 1000)
+  mapM_ print res
+
+
+testStream8 :: IO ()
+testStream8 = do
+  res <-  withConnection connString $
+            streamingSelectAllPipeline' _cart_users db 1000 (\c ->
+                ((_cart_usersFirst_name c) `like_` "J%") &&.
+                ((_cart_usersLast_name c) `like_` "S%") ) $
+              (CL.isolate 1000)
+  mapM_ print res
+
+
+testStream9 :: IO ()
+testStream9 = do
+  res <-  withConnection connString $
+            streamingSelectAllPipeline' _cart_users db 1000 (\c ->
+                ((_cart_usersFirst_name c) `like_` "J%") ||.
+                ((_cart_usersDays_in_queue c) `in_` [1, 5, 10, 20, 30]) ) $
+              (CL.isolate 1000)
+  mapM_ print res
+
+
+testStream10 :: IO ()
+testStream10 = do
+  res <-  withConnection connString $
+            streamingSelectAllPipeline' _cart_users db 1000 (\c ->
+                not_ ((_cart_usersFirst_name c) `like_` "J%") &&.
+                ((_cart_usersDays_in_queue c) ==. 42) ) $
+              (CL.isolate 1000)
   mapM_ print res
