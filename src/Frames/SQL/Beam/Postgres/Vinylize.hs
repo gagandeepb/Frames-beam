@@ -32,8 +32,8 @@ class GenericVinyl a names rs | a -> names rs where
   type FieldNames a :: [Symbol]
   createRecId :: a  -> Rec VF.Identity (ZipTypes names rs)
 
--- | Helps gnerate an instance for @GenericVinyl@, given a plain
--- plain Haskell record declaration name. Uses Template Haskell, so
+-- | Helps generate an instance for @GenericVinyl@, given a plain
+-- Haskell record declaration name. Uses Template Haskell, so
 -- if, say, the record is named @MyRecord@, then first you must
 -- invoke @deriveGeneric ''MyRecord@ to get the Sum-of-Products (SOP)
 -- representation (imported from @generic-sop@) of the record in-scope,
