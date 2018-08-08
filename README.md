@@ -150,7 +150,7 @@ streamRows = do
               (CL.map (\record -> F.rcast @["_cart_usersEmail" F.:-> Text, "_cart_usersIs_member" F.:-> Bool] record))
   mapM_ print res
 ```
-In the above, we select all rows from the specified table that match a certain pattern (`"J%"`), then the function `streamingSelectAllPipeline'` converts the query results to vinyl records inside a `conduit` and sends it downstream, where we can operate on its output. Here, specifically, we do a column subset of the output using `CL.map`, and send it downstream, where the result gets returned. We then print the list of `vinyl` records.
+In the above, we select all rows from the specified table that match a certain pattern (`"J%"`), then the function `streamingSelectAllPipeline'` converts the query results to vinyl records inside a `conduit` and sends it downstream, where we can operate on its output. Here, specifically, we do a column subset of the output using `rcast`, and `CL.map` applies `rcast` to every incoming row and sends it downstream, where the result gets returned. We then print the list of `vinyl` records.
 
 In order to write your own conduit, all you need to know is that internally the conduit flow is as follows:
 
