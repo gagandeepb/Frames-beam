@@ -8,16 +8,16 @@
 {-# LANGUAGE TypeFamilies           #-}
 {-# LANGUAGE TypeFamilyDependencies #-}
 {-# LANGUAGE TypeOperators          #-}
-module FramesBeam.Vinylize where
+module Frames.SQL.Beam.Postgres.Vinylize where
 
 import           Data.Proxy
 import           Data.Vinyl
-import qualified Data.Vinyl.Functor  as VF
-import qualified Database.Beam       as B
+import qualified Data.Vinyl.Functor               as VF
+import qualified Database.Beam                    as B
 import           Frames.Col
-import           FramesBeam.Helpers  (fNamesTypeLevel)
+import           Frames.SQL.Beam.Postgres.Helpers (fNamesTypeLevel)
 import           Generics.SOP
-import qualified Generics.SOP.NP     as GSN
+import qualified Generics.SOP.NP                  as GSN
 import           GHC.TypeLits
 import           Language.Haskell.TH
 
@@ -32,8 +32,8 @@ class GenericVinyl a names rs | a -> names rs where
   type FieldNames a :: [Symbol]
   createRecId :: a  -> Rec VF.Identity (ZipTypes names rs)
 
--- | Helps gnerate an instance for @GenericVinyl@, given a plain
--- plain Haskell record declaration name. Uses Template Haskell, so
+-- | Helps generate an instance for @GenericVinyl@, given a plain
+-- Haskell record declaration name. Uses Template Haskell, so
 -- if, say, the record is named @MyRecord@, then first you must
 -- invoke @deriveGeneric ''MyRecord@ to get the Sum-of-Products (SOP)
 -- representation (imported from @generic-sop@) of the record in-scope,

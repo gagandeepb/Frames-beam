@@ -1,6 +1,6 @@
 -- | Template Haskell helper functions used internally.
 {-# LANGUAGE TemplateHaskell #-}
-module FramesBeam.Helpers (
+module Frames.SQL.Beam.Postgres.Helpers (
   fNamesTypeLevel
 ) where
 
