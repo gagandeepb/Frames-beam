@@ -98,8 +98,8 @@ import           Generics.SOP.TH                        (deriveGeneric)
     @
     streamRows :: IO ()
     streamRows = do
-      res <-  withConnection connString $
-                streamingSelectAllPipeline' _cart_users db 1000 (\c -> (_cart_usersFirst_name c) \`like_\` \"J%\") $
+      res <-  'withConnection' connString $
+                'streamingSelectAllPipeline'' _cart_users db 1000 (\c -> (_cart_usersFirst_name c) \`like_\` \"J%\") $
                   (CL.map (\record -> F.rcast @["_cart_usersEmail" F.:-> Text, "_cart_usersIs_member" F.:-> Bool] record))
       mapM_ print res
     @
@@ -116,7 +116,7 @@ import           Generics.SOP.TH                        (deriveGeneric)
      the conduit flow is as follows:
 
     @
-    (\c -> runConduit $ c .| CL.map createRecId
+    (\c -> runConduit $ c .| CL.map 'createRecId'
                           .| recordProcessorConduit
                           .| CL.take nrows)
     @
@@ -145,7 +145,7 @@ import           Generics.SOP.TH                        (deriveGeneric)
     import qualified Frames                   as F
     import           Frames.SQL.Beam.Postgres
 
-    $(genBeamSchema "host=localhost dbname=shoppingcart1")
+    $('genBeamSchema' "host=localhost dbname=shoppingcart1")
     @
 
     @2.@ Next, execute @stack build@ or @stack ghci@. This compilation step, if completed
@@ -174,7 +174,7 @@ import           Generics.SOP.TH                        (deriveGeneric)
     import NewBeamSchema
 
 
-    $(genBeamSchema "host=localhost dbname=shoppingcart1")
+    $('genBeamSchema' "host=localhost dbname=shoppingcart1")
     @
 
     @4.@ Let's assume the table of interest is @Cart_usersT@. We want to pull rows from this
@@ -190,10 +190,10 @@ import           Generics.SOP.TH                        (deriveGeneric)
     import NewBeamSchema
 
 
-    $(genBeamSchema "host=localhost dbname=shoppingcart1")
+    $('genBeamSchema' "host=localhost dbname=shoppingcart1")
 
-    deriveGeneric ''Cart_usersT
-    deriveVinyl ''Cart_usersT
+    'deriveGeneric' ''Cart_usersT
+    'deriveVinyl' ''Cart_usersT
     @
     ...and build your project. This will add some additional code into the @Example@ module.
     You can inspect this code by adding the appropriate compiler flags to your @.cabal@ file.
@@ -213,13 +213,13 @@ import           Generics.SOP.TH                        (deriveGeneric)
     -- selects 'n' rows from the specified table in the db.
     loadRows1 :: Int -> IO [(Cart_usersT Identity)]
     loadRows1 n =
-      withConnection connString $
-        bulkSelectAllRows _cart_users db n
+      'withConnection' connString $
+        'bulkSelectAllRows' _cart_users db n
 
     loadRows2 :: Int -> IO [(Cart_usersT Identity)]
     loadRows2 n =
-      withConnection connString $
-        bulkSelectAllRowsWhere _cart_users db n (\c -> (_cart_usersFirst_name c) \`like_\` \"J%\")
+      'withConnection' connString $
+        'bulkSelectAllRowsWhere' _cart_users db n (\c -> (_cart_usersFirst_name c) \`like_\` \"J%\")
     @
 
     Notice the lambda passed to `bulkSelectAllRowsWhere` in `loadRows2`. This is a 'filter lambda'
