@@ -31,7 +31,7 @@ library
                     ,  Frames.SQL.Beam.Postgres.Streaming
   other-modules:       Frames.SQL.Beam.Postgres.Helpers              
   build-depends:       
-          base >=4.7 
+          base >=4.7 && <5.0
         , beam-core >=0.7.2.1 
         , beam-postgres >=0.3.2.0
         , beam-migrate >=0.3.2.1
@@ -59,7 +59,7 @@ test-suite spec
   other-modules:       LibSpec
                        NewBeamSchema
   build-depends:       
-          base >=4.10.1.0 
+          base >=4.10.1.0 && <5.0
         , Frames-beam -any
         , hspec >=2.4.8
         , hspec-core >=2.4.8
