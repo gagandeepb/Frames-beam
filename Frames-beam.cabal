@@ -1,5 +1,5 @@
 name:                Frames-beam
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            A library for accessing Postgres tables as in-memory data structures.   
 description:         
       This library provides a way to access Postgres tables as data frames by providing helpers for generating 
@@ -31,23 +31,23 @@ library
                     ,  Frames.SQL.Beam.Postgres.Streaming
   other-modules:       Frames.SQL.Beam.Postgres.Helpers              
   build-depends:       
-        base >=4.7 && <5,
-        beam-core >=0.7.2.1 && <0.8,
-        beam-postgres >=0.3.2.0 && <0.4,
-        beam-migrate >=0.3.2.1 && <0.4,
-        text >=1.2.3.0 && <1.3,
-        postgresql-simple >=0.5.3.0 && <0.6,
-        Frames >=0.3.0.2 && <0.4,
-        template-haskell >=2.12.0.0 && <2.13,
-        generics-sop >=0.3.2.0 && <0.4,
-        vinyl >=0.7.0 && <0.8,
-        process >=1.6.1.0 && <1.7,
-        conduit >=1.3.0.2 && <1.4,
-        monad-control >=1.0.2.3 && <1.1,
-        bytestring >=0.10.8.2 && <0.11,
-        scientific >=0.3.5.3 && <0.4,
-        time >=1.8.0.2 && <1.9,
-        uuid-types >=1.0.3 && <1.1
+          base >=4.7 
+        , beam-core >=0.7.2.1 
+        , beam-postgres >=0.3.2.0
+        , beam-migrate >=0.3.2.1
+        , text >=1.2.3.0
+        , postgresql-simple >=0.5.3.0
+        , Frames >=0.3.0.2
+        , template-haskell >=2.12.0.0
+        , generics-sop >=0.3.2.0
+        , vinyl >=0.7.0
+        , process >=1.6.1.0
+        , conduit >=1.3.0.2 
+        , monad-control >=1.0.2.3 
+        , bytestring >=0.10.8.2
+        , scientific >=0.3.5.3 
+        , time >=1.8.0.2
+        , uuid-types >=1.0.3 
                     
 
 test-suite spec
@@ -59,20 +59,20 @@ test-suite spec
   other-modules:       LibSpec
                        NewBeamSchema
   build-depends:       
-        base >=4.10.1.0 && <4.11,
-        Frames-beam -any,
-        hspec >=2.4.8 && <2.5,
-        hspec-core >=2.4.8 && <2.5,
-        QuickCheck >=2.10.1 && <2.11,
-        conduit >=1.3.0.2 && <1.4,
-        generics-sop >=0.3.2.0 && <0.4,
-        text >=1.2.3.0 && <1.3,
-        vinyl >=0.7.0 && <0.8,
-        Frames >=0.3.0.2 && <0.4,
-        beam-core >=0.7.2.1 && <0.8,
-        beam-postgres >=0.3.2.0 && <0.4,
-        beam-migrate >=0.3.2.1 && <0.4,
-        bytestring >=0.10.8.2 && <0.11
+          base >=4.10.1.0 
+        , Frames-beam -any
+        , hspec >=2.4.8
+        , hspec-core >=2.4.8
+        , QuickCheck >=2.10.1 
+        , conduit >=1.3.0.2 
+        , generics-sop >=0.3.2.0 
+        , text >=1.2.3.0
+        , vinyl >=0.7.0 
+        , Frames >=0.3.0.2 
+        , beam-core >=0.7.2.1 
+        , beam-postgres >=0.3.2.0
+        , beam-migrate >=0.3.2.1
+        , bytestring >=0.10.8.2 
 
 source-repository head
   type:     git
