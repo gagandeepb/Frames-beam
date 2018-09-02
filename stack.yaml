@@ -66,3 +66,5 @@ packages:
 extra-deps:
 - beam-postgres-0.3.2.0
 - beam-migrate-0.3.2.1
+- vinyl-0.10.0
+- Frames-0.5.0

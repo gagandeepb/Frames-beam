@@ -22,15 +22,15 @@ import           GHC.TypeLits
 import           Language.Haskell.TH
 
 -- | Type family that generates the column types for the vinyl representation.
-type family ZipTypes (ns :: [Symbol])  (ys :: [*]) = (zs :: [k]) | zs -> ns ys
+type family ZipTypes (ns :: [Symbol])  (ys :: [*]) = (zs :: [(Symbol, *)]) | zs -> ns ys
 type instance ZipTypes '[] '[] = '[]
-type instance ZipTypes (n ': ns) (y ': ys)  =  ( n  :-> y) ': (ZipTypes ns  ys)
+type instance ZipTypes (n ': ns) (y ': ys)  =  '( n, y) ': (ZipTypes ns  ys)
 
 -- | Typeclass for converting a plain Haskell record to it's vinyl
 -- representation.
 class GenericVinyl a names rs | a -> names rs where
   type FieldNames a :: [Symbol]
-  createRecId :: a  -> Rec VF.Identity (ZipTypes names rs)
+  createRecId :: a  -> Rec VF.ElField (ZipTypes names rs)
 
 -- | Helps generate an instance for @GenericVinyl@, given a plain
 -- Haskell record declaration name. Uses Template Haskell, so
@@ -51,9 +51,9 @@ deriveVinyl name = entireInstance
           (ns3 ~ FieldNames ($(n) B.Identity)) )
           => GenericVinyl ($(n) B.Identity) ns3 rs where
           type FieldNames ($(n) B.Identity) = $(typeList1)
-          createRecId r = (go tranformedNP)
+          createRecId r = withNames $ go transformedNP
             where
               SOP (Z prod) = from r
-              tranformedNP = (((GSN.trans_NP (Proxy :: Proxy (LiftedCoercible I VF.Identity)) (\(I x) -> VF.Identity $ coerce x) prod)) )
-              go = GSN.cata_NP RNil (:&)
+              transformedNP = GSN.fromI_NP prod
+              go = GSN.cata_NP RNil (:&)   
          |]
