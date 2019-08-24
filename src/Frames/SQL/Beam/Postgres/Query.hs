@@ -11,7 +11,7 @@ module Frames.SQL.Beam.Postgres.Query where
 import           Data.Vinyl.TypeLevel
 import           Database.Beam
 import           Database.Beam.Postgres
-import           Database.Beam.Postgres.Syntax
+
 import           Frames.Frame
 import           Frames.InCore
 import           Frames.SQL.Beam.Postgres.Vinylize
@@ -22,7 +22,7 @@ type PostgresTable a b =
 type PostgresDB b = DatabaseSettings Postgres b
 
 type PostgresFilterLambda a s =
-  (a (QExpr PgExpressionSyntax s)) -> QExpr PgExpressionSyntax s Bool
+  (a (QExpr Postgres s)) -> QExpr Postgres s Bool
 
 type JoinQueryResults a b = [(a Identity, b Identity)]
 
@@ -34,7 +34,7 @@ type JoinQueryResults a b = [(a Identity, b Identity)]
 allRows :: (Database Postgres b, Table a) =>
             PostgresTable a b
             -> PostgresDB b
-            -> Q PgSelectSyntax b s (a (QExpr PgExpressionSyntax s))
+            -> Q Postgres b s (a (QExpr Postgres s))
 allRows tbl db = all_ (tbl db)
 
 -- | Helps select all rows from a particular table in a database that
@@ -47,7 +47,7 @@ allRowsWhere :: (Database Postgres b, Table a) =>
                 PostgresTable a b
                 -> PostgresDB b
                 -> PostgresFilterLambda a s
-                -> Q PgSelectSyntax b s (a (QExpr PgExpressionSyntax s))
+                -> Q Postgres b s (a (QExpr Postgres s))
 allRowsWhere tbl db filterLambda =
   filter_ (filterLambda) (allRows tbl db)
 
@@ -66,5 +66,3 @@ join2 joinQueryResults =
     bRecs = map createRecId bQRes
     aFrame = toFrame aRecs
     bFrame = toFrame bRecs
-
-

@@ -10,11 +10,11 @@
 {-# LANGUAGE TypeOperators          #-}
 module Frames.SQL.Beam.Postgres.Vinylize where
 
-import           Data.Proxy
+
 import           Data.Vinyl
 import qualified Data.Vinyl.Functor               as VF
 import qualified Database.Beam                    as B
-import           Frames.Col
+
 import           Frames.SQL.Beam.Postgres.Helpers (fNamesTypeLevel)
 import           Generics.SOP
 import qualified Generics.SOP.NP                  as GSN

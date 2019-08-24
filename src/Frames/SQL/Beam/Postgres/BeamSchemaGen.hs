@@ -58,7 +58,7 @@ getCode connString = do
 sanitizeCode :: String -> String
 sanitizeCode str =
   addExts ++ (T.unpack moduleNameAndImports) ++ addImports ++ (T.unpack beforeMigrationTySig) ++
-    "\nmigration :: Migration PgCommandSyntax (CheckedDatabaseSettings Postgres Db)\n" ++
+    "\nmigration :: Migration Postgres (CheckedDatabaseSettings Postgres Db)\n" ++
     (T.unpack includeThisChunk) ++
     "\ndb :: DatabaseSettings Postgres Db\ndb = unCheckDatabase (runMigrationSilenced (migration))\n"
   where
@@ -88,7 +88,3 @@ addExts =
 addImports :: String
 addImports =
   "import           Database.Beam.Postgres\n\n\n"
-
-
-
-

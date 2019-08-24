@@ -18,7 +18,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-11.7
+resolver: lts-14.1
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -64,7 +64,5 @@ packages:
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
 extra-deps:
-- beam-postgres-0.3.2.0
-- beam-migrate-0.3.2.1
-- vinyl-0.10.0
-- Frames-0.5.0
+- Frames-0.6.1 # @sha256:9d628962ed6d1e835ab2b4d309d7909dc477acf6fa270879b6085621546dccaa,8595
+- discrimination-0.4 # @sha256:ad60cb42d42648ebc6f649ce761fe61cb58eca9e2b17a6b4fe68ed2e1fdd4146,2479
