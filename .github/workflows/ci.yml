@@ -1,0 +1,14 @@
+name: "CI"
+on:
+  pull_request:
+  push:
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-23.11
+    - run: nix-shell
+    - run: stack build

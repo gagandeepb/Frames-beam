@@ -18,7 +18,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-11.7
+resolver: lts-11.22
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -68,3 +68,9 @@ extra-deps:
 - beam-migrate-0.3.2.1
 - vinyl-0.10.0
 - Frames-0.5.0
+- beam-core-0.7.2.1@sha256:7b56e1b75393a2a7010ffcd725dfbc8213043d2939bb4919c7e36c9e551dd329,4726
+
+
+nix:
+  enable: true
+  shell-file: shell.nix
